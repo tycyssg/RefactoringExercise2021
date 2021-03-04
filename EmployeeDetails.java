@@ -653,8 +653,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		int length = fileName.toString().length();
 
 		// check if last characters in file name is .dat
-		if (fileName.toString().charAt(length - 4) == '.' && fileName.toString().charAt(length - 3) == 'd'
-				&& fileName.toString().charAt(length - 2) == 'a' && fileName.toString().charAt(length - 1) == 't')
+		if (fileName.toString().startsWith(".dat", length-4))
 			checkFile = true;
 		return checkFile;
 	}// end checkFileName
@@ -674,7 +673,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 			displayRecords(currentEmployee);
 		} // end else
 
-		return anyChanges;
+		return !anyChanges;
 	}// end checkForChanges
 
 	// check for input in text fields
@@ -955,68 +954,68 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == closeApp) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				exitApp();
 		} else if (e.getSource() == open) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				openFile();
 		} else if (e.getSource() == save) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				saveFile();
 			change = false;
 		} else if (e.getSource() == saveAs) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				saveFileAs();
 			change = false;
 		} else if (e.getSource() == searchById) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				displaySearchByIdDialog();
 		} else if (e.getSource() == searchBySurname) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				displaySearchBySurnameDialog();
 		} else if (e.getSource() == searchId || e.getSource() == searchByIdField)
 			searchEmployeeById();
 		else if (e.getSource() == searchSurname || e.getSource() == searchBySurnameField)
 			searchEmployeeBySurname();
 		else if (e.getSource() == saveChange) {
-			if (checkInput() && !checkForChanges()) ;
+			if (checkInput() && checkForChanges()) ;
 		} else if (e.getSource() == cancelChange)
 			cancelChange();
 		else if (e.getSource() == firstItem || e.getSource() == first) {
-			if (checkInput() && !checkForChanges()) {
+			if (checkInput() && checkForChanges()) {
 				firstRecord();
 				displayRecords(currentEmployee);
 			}
 		} else if (e.getSource() == prevItem || e.getSource() == previous) {
-			if (checkInput() && !checkForChanges()) {
+			if (checkInput() && checkForChanges()) {
 				previousRecord();
 				displayRecords(currentEmployee);
 			}
 		} else if (e.getSource() == nextItem || e.getSource() == next) {
-			if (checkInput() && !checkForChanges()) {
+			if (checkInput() && checkForChanges()) {
 				nextRecord();
 				displayRecords(currentEmployee);
 			}
 		} else if (e.getSource() == lastItem || e.getSource() == last) {
-			if (checkInput() && !checkForChanges()) {
+			if (checkInput() && checkForChanges()) {
 				lastRecord();
 				displayRecords(currentEmployee);
 			}
 		} else if (e.getSource() == listAll || e.getSource() == displayAll) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				if (isSomeoneToDisplay())
 					displayEmployeeSummaryDialog();
 		} else if (e.getSource() == create || e.getSource() == add) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				new AddRecordDialog(EmployeeDetails.this);
 		} else if (e.getSource() == modify || e.getSource() == edit) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				editDetails();
 		} else if (e.getSource() == delete || e.getSource() == deleteButton) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				deleteRecord();
 		} else if (e.getSource() == searchBySurname) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && checkForChanges())
 				new SearchBySurnameDialog(EmployeeDetails.this);
 		}
 	}// end actionPerformed
