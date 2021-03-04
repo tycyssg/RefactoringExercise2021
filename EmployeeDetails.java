@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
+import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -85,6 +85,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	String[] department = { "", "Administration", "Production", "Transport", "Management" };
 	// full time combo box values
 	String[] fullTime = { "", "Yes", "No" };
+
 
 	// initialize menu bar
 	private JMenuBar menuBar() {
@@ -297,45 +298,26 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// display current Employee details
 	public void displayRecords(Employee thisEmployee) {
-		int countGender = 0;
-		int countDep = 0;
-		boolean found = false;
-
 		searchByIdField.setText("");
 		searchBySurnameField.setText("");
 		// if Employee is null or ID is 0 do nothing else display Employee
 		// details
 		if(thisEmployee != null && thisEmployee.getEmployeeId() != 0) {
-			// find corresponding gender combo box value to current employee
-			while (!found && countGender < gender.length - 1) {
-				if (Character.toString(thisEmployee.getGender()).equalsIgnoreCase(gender[countGender]))
-					found = true;
-				else
-					countGender++;
-			} // end while
-			found = false;
-			// find corresponding department combo box value to current employee
-			while (!found && countDep < department.length - 1) {
-				if (thisEmployee.getDepartment().trim().equalsIgnoreCase(department[countDep]))
-					found = true;
-				else
-					countDep++;
-			} // end while
 			idField.setText(Integer.toString(thisEmployee.getEmployeeId()));
 			ppsField.setText(thisEmployee.getPps().trim());
 			surnameField.setText(thisEmployee.getSurname().trim());
 			firstNameField.setText(thisEmployee.getFirstName());
-			genderCombo.setSelectedIndex(countGender);
-			departmentCombo.setSelectedIndex(countDep);
+			//Set the gender and department
+			genderCombo.setSelectedIndex(Arrays.asList(gender).indexOf(Character.toString(thisEmployee.getGender())));
+			departmentCombo.setSelectedIndex(Arrays.asList(department).indexOf(thisEmployee.getDepartment()));
 			salaryField.setText(format.format(thisEmployee.getSalary()));
 			// set corresponding full time combo box value to current employee
-			if (thisEmployee.getFullTime())
-				fullTimeCombo.setSelectedIndex(1);
-			else
-				fullTimeCombo.setSelectedIndex(2);
+			fullTimeCombo.setSelectedIndex(thisEmployee.getFullTime() ? 1:2);
 		}
 		change = false;
 	}// end display records
+
+
 
 	// display Employee summary dialog
 	private void displayEmployeeSummaryDialog() {
@@ -1088,6 +1070,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 				createAndShowGUI();
 			}
 		});
+
 	}// end main
 
 	// DocumentListener methods
