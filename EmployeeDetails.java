@@ -224,7 +224,6 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		return buttonPanel;
 	}
 
-
 	// initialize main/details panel
 	private JPanel detailsPanel() {
 		JPanel empDetails = new JPanel(new MigLayout());
@@ -315,8 +314,6 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		}
 		change = false;
 	}// end display records
-
-
 
 	// display Employee summary dialog
 	private void displayEmployeeSummaryDialog() {
@@ -560,7 +557,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	// create vector of vectors with all Employee details
 	private Vector<Object> getAllEmloyees() {
 		// vector of Employee objects
-		Vector<Object> allEmployee = new Vector<Object>();
+		Vector<Object> allEmployee = new Vector<>();
 		Vector<Object> empDetails;// vector of each employee details
 		long byteStart = currentByteStart;
 		int firstId;
@@ -569,7 +566,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		firstId = currentEmployee.getEmployeeId();
 		// loop until all Employees are added to vector
 		do {
-			empDetails = new Vector<Object>();
+			empDetails = new Vector<>();
 			empDetails.addElement(currentEmployee.getEmployeeId());
 			empDetails.addElement(currentEmployee.getPps());
 			empDetails.addElement(currentEmployee.getSurname());
@@ -606,7 +603,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// check if any of records in file is active - ID is not 0
 	private boolean isSomeoneToDisplay() {
-		boolean someoneToDisplay = false;
+		boolean someoneToDisplay;
 		// open file for reading
 		application.openReadFile(file.getAbsolutePath());
 		// check if any of records in file is active - ID is not 0
@@ -630,14 +627,11 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// check for correct PPS format and look if PPS already in use
 	public boolean correctPps(String pps, long currentByte) {
-		boolean ppsExist = false;
+		boolean ppsExist;
+
 		// check for correct PPS format based on assignment description
 		if (pps.length() == 8 || pps.length() == 9) {
-			if (Character.isDigit(pps.charAt(0)) && Character.isDigit(pps.charAt(1))
-					&& Character.isDigit(pps.charAt(2))	&& Character.isDigit(pps.charAt(3)) 
-					&& Character.isDigit(pps.charAt(4))	&& Character.isDigit(pps.charAt(5)) 
-					&& Character.isDigit(pps.charAt(6))	&& Character.isLetter(pps.charAt(7))
-					&& (pps.length() == 8 || Character.isLetter(pps.charAt(8)))) {
+			if(pps.substring(0,7).matches("[0-9]+") && Character.isLetter(pps.charAt(7)) && (pps.length() == 8 || Character.isLetter(pps.charAt(8)))){
 				// open file for reading
 				application.openReadFile(file.getAbsolutePath());
 				// look in file is PPS already in use
@@ -754,10 +748,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	// enable text fields for editing
 	public void setEnabled(boolean booleanValue) {
 		boolean search;
-		if (booleanValue)
-			search = false;
-		else
-			search = true;
+		search = !booleanValue;
 		ppsField.setEditable(booleanValue);
 		surnameField.setEditable(booleanValue);
 		firstNameField.setEditable(booleanValue);
@@ -988,8 +979,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		else if (e.getSource() == searchSurname || e.getSource() == searchBySurnameField)
 			searchEmployeeBySurname();
 		else if (e.getSource() == saveChange) {
-			if (checkInput() && !checkForChanges())
-				;
+			if (checkInput() && !checkForChanges()) ;
 		} else if (e.getSource() == cancelChange)
 			cancelChange();
 		else if (e.getSource() == firstItem || e.getSource() == first) {
