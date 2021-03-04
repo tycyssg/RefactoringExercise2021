@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -309,7 +308,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 			firstNameField.setText(thisEmployee.getFirstName());
 			//Set the gender and department
 			genderCombo.setSelectedIndex(Arrays.asList(gender).indexOf(Character.toString(thisEmployee.getGender())));
-			departmentCombo.setSelectedIndex(Arrays.asList(department).indexOf(thisEmployee.getDepartment()));
+			departmentCombo.setSelectedIndex(Arrays.asList(department).indexOf(thisEmployee.getDepartment().trim()));
 			salaryField.setText(format.format(thisEmployee.getSalary()));
 			// set corresponding full time combo box value to current employee
 			fullTimeCombo.setSelectedIndex(thisEmployee.getFullTime() ? 1:2);
