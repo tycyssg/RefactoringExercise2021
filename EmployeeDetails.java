@@ -627,24 +627,22 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// check for correct PPS format and look if PPS already in use
 	public boolean correctPps(String pps, long currentByte) {
-		boolean ppsExist;
+
+		if(pps.length() < 8 || pps.length() > 9) {
+			return true;
+		}
 
 		// check for correct PPS format based on assignment description
-		if (pps.length() == 8 || pps.length() == 9) {
 			if(pps.substring(0,7).matches("[0-9]+") && Character.isLetter(pps.charAt(7)) && (pps.length() == 8 || Character.isLetter(pps.charAt(8)))){
 				// open file for reading
 				application.openReadFile(file.getAbsolutePath());
 				// look in file is PPS already in use
-				ppsExist = application.isPpsExist(pps, currentByte);
+				boolean ppsExist = application.isPpsExist(pps, currentByte);
 				application.closeReadFile();// close file for reading
+				return ppsExist;
 			} // end if
-			else
-				ppsExist = true;
-		} // end if
-		else
-			ppsExist = true;
 
-		return ppsExist;
+		return true;
 	}// end correctPPS
 
 	// check if file name has extension .dat
