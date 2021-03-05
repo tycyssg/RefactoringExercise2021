@@ -12,8 +12,7 @@ public class RandomAccessEmployeeRecord extends Employee
     public static final int SIZE = 175; // Size of each RandomAccessEmployeeRecord object
 
    // Create empty record
-   public RandomAccessEmployeeRecord()
-   {
+   public RandomAccessEmployeeRecord() {
       this(0, "","","",'\0', "", 0.0, false);
    } // end RandomAccessEmployeeRecord
 
@@ -25,8 +24,7 @@ public class RandomAccessEmployeeRecord extends Employee
    } // end RandomAccessEmployeeRecord
 
    // Read a record from specified RandomAccessFile
-   public void read( RandomAccessFile file ) throws IOException
-   {
+   public void read( RandomAccessFile file ) throws IOException {
 	   	setEmployeeId(file.readInt());
 		setPps(readName(file));
 		setSurname(readName(file));
@@ -38,15 +36,11 @@ public class RandomAccessEmployeeRecord extends Employee
    } // end read
 
    // Ensure that string is correct length
-   private String readName( RandomAccessFile file ) throws IOException
-   {
+   private String readName( RandomAccessFile file ) throws IOException {
       char[] name = new char[ 20 ];
-      char temp;
 
-      for ( int count = 0; count < name.length; count++ )
-      {
-         temp = file.readChar();
-         name[ count ] = temp;
+      for ( int count = 0; count < name.length; count++ ) {
+         name[ count ] = file.readChar();
       } // end for     
       
       return new String( name ).replace( '\0', ' ' );
