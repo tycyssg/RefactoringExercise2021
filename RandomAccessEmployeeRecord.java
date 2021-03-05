@@ -47,8 +47,7 @@ public class RandomAccessEmployeeRecord extends Employee
    } // end readName
 
    // Write a record to specified RandomAccessFile
-   public void write( RandomAccessFile file ) throws IOException
-   {
+   public void write( RandomAccessFile file ) throws IOException {
       file.writeInt( getEmployeeId() );
       writeName(file, getPps().toUpperCase());
       writeName( file, getSurname().toUpperCase() );
@@ -60,17 +59,12 @@ public class RandomAccessEmployeeRecord extends Employee
    } // end write
 
    // Ensure that string is correct length
-   private void writeName( RandomAccessFile file, String name )
-      throws IOException
-   {
-      StringBuffer buffer;
+   private void writeName( RandomAccessFile file, String name ) throws IOException {
+      StringBuffer buffer = new StringBuffer( 20 );
 
       if ( name != null ) 
          buffer = new StringBuffer( name );
-      else 
-         buffer = new StringBuffer( 20 );
 
-      buffer.setLength( 20 );
       file.writeChars( buffer.toString() );
    } // end writeName
 } // end class RandomAccessEmployeeRecord
