@@ -671,14 +671,9 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// get values from text fields and create Employee object
 	private Employee getChangedDetails() {
-		boolean fullTime = false;
-		Employee theEmployee;
-		if (fullTimeCombo.getSelectedItem() == null) return null;
+		boolean fullTime = Objects.requireNonNull(fullTimeCombo.getSelectedItem()).toString().equalsIgnoreCase("Yes");
 
-		if (fullTimeCombo.getSelectedItem().toString().equalsIgnoreCase("Yes"))
-			fullTime = true;
-
-		theEmployee = new Employee(Integer.parseInt(
+		return new Employee(Integer.parseInt(
 				idField.getText()),
 				ppsField.getText().toUpperCase(),
 				surnameField.getText().toUpperCase(),
@@ -687,8 +682,6 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 				Objects.requireNonNull(departmentCombo.getSelectedItem()).toString(),
 				Double.parseDouble(salaryField.getText()),
 				fullTime);
-
-		return theEmployee;
 	}// end getChangedDetails
 
 	// set text field background colour to white
