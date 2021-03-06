@@ -1,7 +1,7 @@
 /*
- * 
+ *
  * This class is for accessing, creating and modifying records in a file
- * 
+ *
  * */
 
 import java.io.IOException;
@@ -65,31 +65,23 @@ public class RandomFile {
 
 	// Add records to file
 	public long addRecords(Employee employeeToAdd) {
-		long currentRecordStart = 0;
-
-		// object to be written to file
-		RandomAccessEmployeeRecord record;
-
 		try // output values to file
 		{
-			record = new RandomAccessEmployeeRecord(employeeToAdd.getEmployeeId(), employeeToAdd.getPps(),
+			// object to be written to file
+			RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord(employeeToAdd.getEmployeeId(), employeeToAdd.getPps(),
 					employeeToAdd.getSurname(), employeeToAdd.getFirstName(), employeeToAdd.getGender(),
 					employeeToAdd.getDepartment(), employeeToAdd.getSalary(), employeeToAdd.getFullTime());
 
 			output.seek(output.length());// Look for proper position
 			record.write(output);// Write object to file
-			currentRecordStart = output.length();
+			long currentRecordStart = output.length();
+			// Return position where object starts in the file
+			return currentRecordStart - RandomAccessEmployeeRecord.SIZE;
 		} // end try
 		catch (IOException ioException) {
 			JOptionPane.showMessageDialog(null, "Error writing to file!");
+			return 0;
 		} // end catch
-
-		return currentRecordStart - RandomAccessEmployeeRecord.SIZE;// Return
-																	// position
-																	// where
-																	// object
-																	// starts in
-																	// the file
 	}// end addRecords
 
 	// Change details for existing object
@@ -112,13 +104,11 @@ public class RandomFile {
 
 	// Delete existing object
 	public void deleteRecords(long byteToStart) {
-
 		// object to be written to file
-		RandomAccessEmployeeRecord record;
+		RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord();// Create empty object;
 
 		try // output values to file
 		{
-			record = new RandomAccessEmployeeRecord();// Create empty object
 			output.seek(byteToStart);// Look for proper position
 			record.write(output);// Replace existing object with empty object
 		} // end try
@@ -134,7 +124,7 @@ public class RandomFile {
 			input = new RandomAccessFile(fileName, "r");
 		} // end try
 		catch (IOException ioException) {
-			JOptionPane.showMessageDialog(null, "File is not suported!");
+			JOptionPane.showMessageDialog(null, "File is not supported!");
 		} // end catch
 	} // end method openFile
 
@@ -153,67 +143,54 @@ public class RandomFile {
 
 	// Get position of first record in file
 	public long getFirst() {
-		long byteToStart = 0;
-
-		try {// try to get file
-			input.length();
-		} // end try
-		catch (IOException ignored) {
-		}// end catch
-		
-		return byteToStart;
+		return 0;
 	}// end getFirst
 
 	// Get position of last record in file
 	public long getLast() {
-		long byteToStart = 0;
-
 		try {// try to get position of last record
-			byteToStart = input.length() - RandomAccessEmployeeRecord.SIZE;
-		}// end try 
+			return (input.length() - RandomAccessEmployeeRecord.SIZE);
+		}// end try
 		catch (IOException ignored) {
+			return 0;
 		}// end catch
 
-		return byteToStart;
 	}// end getFirst
 
 	// Get position of next record in file
 	public long getNext(long readFrom) {
-		long byteToStart = readFrom;
-
 		try {// try to read from file
-			input.seek(byteToStart);// Look for proper position in file
+			input.seek(readFrom);// Look for proper position in file
 			// if next position is end of file go to start of file, else get next position
-			if (byteToStart + RandomAccessEmployeeRecord.SIZE == input.length())
-				byteToStart = 0;
+			if (readFrom + RandomAccessEmployeeRecord.SIZE == input.length())
+				readFrom = 0;
 			else
-				byteToStart = byteToStart + RandomAccessEmployeeRecord.SIZE;
+				readFrom = readFrom + RandomAccessEmployeeRecord.SIZE;
 		} // end try
 		catch (NumberFormatException | IOException ignored) {
 		} // end catch
-		return byteToStart;
+
+		return readFrom;
 	}// end getFirst
 
 	// Get position of previous record in file
 	public long getPrevious(long readFrom) {
-		long byteToStart = readFrom;
-
 		try {// try to read from file
-			input.seek(byteToStart);// Look for proper position in file
+			input.seek(readFrom);// Look for proper position in file
 			// if previous position is start of file go to end of file, else get previous position
-			if (byteToStart == 0)
-				byteToStart = input.length() - RandomAccessEmployeeRecord.SIZE;
-			else
-				byteToStart = byteToStart - RandomAccessEmployeeRecord.SIZE;
+			if (readFrom == 0)
+				return input.length() - RandomAccessEmployeeRecord.SIZE;
+
+			return (readFrom - RandomAccessEmployeeRecord.SIZE);
 		} // end try
 		catch (NumberFormatException | IOException ignored) {
+			return 0;
 		} // end catch
-		return byteToStart;
+
 	}// end getPrevious
 
 	// Get object from file in specified position
 	public Employee readRecords(long byteToStart) {
-		Employee thisEmp;
 		RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord();
 
 		try {// try to read file and get record
@@ -222,10 +199,8 @@ public class RandomFile {
 		} // end try
 		catch (IOException ignored) {
 		}// end catch
-		
-		thisEmp = record;
 
-		return thisEmp;
+		return record;
 	}// end readRecords
 
 	// Check if PPS Number already in use
@@ -258,9 +233,9 @@ public class RandomFile {
 
 	// Check if any record contains valid ID - greater than 0
 	public boolean isSomeoneToDisplay() {
+		RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord();
 		boolean someoneToDisplay = false;
 		long currentByte = 0;
-		RandomAccessEmployeeRecord record = new RandomAccessEmployeeRecord();
 
 		try {// try to read from file and look for ID
 			// Start from start of file and loop until valid ID is found or search returned to start position
@@ -278,4 +253,5 @@ public class RandomFile {
 
 		return someoneToDisplay;
 	}// end isSomeoneToDisplay
+
 }// end class RandomFile
