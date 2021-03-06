@@ -508,20 +508,15 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		return nextFreeId;
 	}// end getNextFreeId
 
-	// get values from text fields and create Employee object
-	private Employee getChangedDetails() {
-		boolean fullTime = false;
-		Employee theEmployee;
-		if (((String) fullTimeCombo.getSelectedItem()).equalsIgnoreCase("Yes"))
-			fullTime = true;
+	// main method
+	public static void main(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				createAndShowGUI();
+			}
+		});
 
-		theEmployee = new Employee(Integer.parseInt(idField.getText()), ppsField.getText().toUpperCase(),
-				surnameField.getText().toUpperCase(), firstNameField.getText().toUpperCase(),
-				genderCombo.getSelectedItem().toString().charAt(0), departmentCombo.getSelectedItem().toString(),
-				Double.parseDouble(salaryField.getText()), fullTime);
-
-		return theEmployee;
-	}// end getChangedDetails
+	}// end main
 
 	// add Employee object to fail
 	public void addRecord(Employee newEmployee) {
@@ -664,8 +659,8 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 			saveChanges();// save changes
 			anyChanges = true;
 		} // end if
-			// if no changes made, set text fields as unenabled and display
-			// current Employee
+		// if no changes made, set text fields as unenabled and display
+		// current Employee
 		else {
 			setEnabled(false);
 			displayRecords(currentEmployee);
@@ -674,62 +669,27 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		return !anyChanges;
 	}// end checkForChanges
 
-	// check for input in text fields
-	private boolean checkInput() {
-		boolean valid = true;
-		// if any of inputs are in wrong format, colour text field and display
-		// message
-		if (ppsField.isEditable() && ppsField.getText().trim().isEmpty()) {
-			ppsField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (ppsField.isEditable() && correctPps(ppsField.getText().trim(), currentByteStart)) {
-			ppsField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (surnameField.isEditable() && surnameField.getText().trim().isEmpty()) {
-			surnameField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (firstNameField.isEditable() && firstNameField.getText().trim().isEmpty()) {
-			firstNameField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (genderCombo.getSelectedIndex() == 0 && genderCombo.isEnabled()) {
-			genderCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (departmentCombo.getSelectedIndex() == 0 && departmentCombo.isEnabled()) {
-			departmentCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		try {// try to get values from text field
-			Double.parseDouble(salaryField.getText());
-			// check if salary is greater than 0
-			if (Double.parseDouble(salaryField.getText()) < 0) {
-				salaryField.setBackground(new Color(255, 150, 150));
-				valid = false;
-			} // end if
-		} // end try
-		catch (NumberFormatException num) {
-			if (salaryField.isEditable()) {
-				salaryField.setBackground(new Color(255, 150, 150));
-				valid = false;
-			} // end if
-		} // end catch
-		if (fullTimeCombo.getSelectedIndex() == 0 && fullTimeCombo.isEnabled()) {
-			fullTimeCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-			// display message if any input or format is wrong
-		if (!valid)
-			JOptionPane.showMessageDialog(null, "Wrong values or format! Please check!");
-		// set text field to white colour if text fields are editable
-		if (ppsField.isEditable())
-			setToWhite();
+	// get values from text fields and create Employee object
+	private Employee getChangedDetails() {
+		boolean fullTime = false;
+		Employee theEmployee;
+		if (fullTimeCombo.getSelectedItem() == null) return null;
 
-		return valid;
-	}
+		if (fullTimeCombo.getSelectedItem().toString().equalsIgnoreCase("Yes"))
+			fullTime = true;
+
+		theEmployee = new Employee(Integer.parseInt(
+				idField.getText()),
+				ppsField.getText().toUpperCase(),
+				surnameField.getText().toUpperCase(),
+				firstNameField.getText().toUpperCase(),
+				Objects.requireNonNull(genderCombo.getSelectedItem()).toString().charAt(0),
+				Objects.requireNonNull(departmentCombo.getSelectedItem()).toString(),
+				Double.parseDouble(salaryField.getText()),
+				fullTime);
+
+		return theEmployee;
+	}// end getChangedDetails
 
 	// set text field background colour to white
 	private void setToWhite() {
@@ -848,6 +808,102 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		setEnabled(false);
 	}// end saveChanges
 
+	// check for input in text fields
+	private boolean checkInput() {
+		boolean valid = true;
+		// if any of inputs are in wrong format, colour text field and display
+		// message
+		if (ppsField.isEditable() && ppsField.getText().trim().isEmpty()) {
+			ppsField.setBackground(new Color(255, 150, 150));
+			valid = false;
+		} // end if
+		if (ppsField.isEditable() && correctPps(ppsField.getText().trim(), currentByteStart)) {
+			ppsField.setBackground(new Color(255, 150, 150));
+			valid = false;
+		} // end if
+		if (surnameField.isEditable() && surnameField.getText().trim().isEmpty()) {
+			surnameField.setBackground(new Color(255, 150, 150));
+			valid = false;
+		} // end if
+		if (firstNameField.isEditable() && firstNameField.getText().trim().isEmpty()) {
+			firstNameField.setBackground(new Color(255, 150, 150));
+			valid = false;
+		} // end if
+		if (genderCombo.getSelectedIndex() == 0 && genderCombo.isEnabled()) {
+			genderCombo.setBackground(new Color(255, 150, 150));
+			valid = false;
+		} // end if
+		if (departmentCombo.getSelectedIndex() == 0 && departmentCombo.isEnabled()) {
+			departmentCombo.setBackground(new Color(255, 150, 150));
+			valid = false;
+		} // end if
+
+		try {// try to get values from text field
+			Double.parseDouble(salaryField.getText());
+			// check if salary is greater than 0
+			if (Double.parseDouble(salaryField.getText()) < 0) {
+				salaryField.setBackground(new Color(255, 150, 150));
+				valid = false;
+			} // end if
+		} // end try
+		catch (NumberFormatException num) {
+			if (salaryField.isEditable()) {
+				salaryField.setBackground(new Color(255, 150, 150));
+				valid = false;
+			} // end if
+		} // end catch
+		if (fullTimeCombo.getSelectedIndex() == 0 && fullTimeCombo.isEnabled()) {
+			fullTimeCombo.setBackground(new Color(255, 150, 150));
+			valid = false;
+		} // end if
+		// display message if any input or format is wrong
+		if (!valid)
+			JOptionPane.showMessageDialog(null, "Wrong values or format! Please check!");
+		// set text field to white colour if text fields are editable
+		if (ppsField.isEditable())
+			setToWhite();
+
+		return valid;
+	}
+
+	// allow to save changes to file when exiting the application
+	private void exitApp() {
+		// if file is not empty allow to save changes
+		if (file.length() != 0) {
+			if (changesMade) {
+				int returnVal = JOptionPane.showOptionDialog(frame, "Do you want to save changes?", "Save",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+				// if user chooses to save file, save file
+				if (returnVal == JOptionPane.YES_OPTION) {
+					saveFile();// save file
+					// delete generated file if user saved details to other file
+					if (file.getName().equals(generatedFileName))
+						file.delete();// delete file
+					System.exit(0);// exit application
+				} // end if
+					// else exit application
+				else if (returnVal == JOptionPane.NO_OPTION) {
+					// delete generated file if user chooses not to save file
+					if (file.getName().equals(generatedFileName))
+						file.delete();// delete file
+					System.exit(0);// exit application
+				} // end else if
+			} // end if
+			else {
+				// delete generated file if user chooses not to save file
+				if (file.getName().equals(generatedFileName))
+					file.delete();// delete file
+				System.exit(0);// exit application
+			} // end else
+			// else exit application
+		} else {
+			// delete generated file if user chooses not to save file
+			if (file.getName().equals(generatedFileName))
+				file.delete();// delete file
+			System.exit(0);// exit application
+		} // end else
+	}// end exitApp
+
 	// save file as 'save as'
 	private void saveFileAs() {
 		final JFileChooser fc = new JFileChooser();
@@ -881,63 +937,11 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 					file.delete();// delete file
 				file = newFile;// assign new file to file
 			} // end try
-			catch (IOException e) {
+			catch (IOException ignored) {
 			} // end catch
 		} // end if
 		changesMade = false;
 	}// end saveFileAs
-
-	// allow to save changes to file when exiting the application
-	private void exitApp() {
-		// if file is not empty allow to save changes
-		if (file.length() != 0) {
-			if (changesMade) {
-				int returnVal = JOptionPane.showOptionDialog(frame, "Do you want to save changes?", "Save",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-				// if user chooses to save file, save file
-				if (returnVal == JOptionPane.YES_OPTION) {
-					saveFile();// save file
-					// delete generated file if user saved details to other file
-					if (file.getName().equals(generatedFileName))
-						file.delete();// delete file
-					System.exit(0);// exit application
-				} // end if
-					// else exit application
-				else if (returnVal == JOptionPane.NO_OPTION) {
-					// delete generated file if user chooses not to save file
-					if (file.getName().equals(generatedFileName))
-						file.delete();// delete file
-					System.exit(0);// exit application
-				} // end else if
-			} // end if
-			else {
-				// delete generated file if user chooses not to save file
-				if (file.getName().equals(generatedFileName))
-					file.delete();// delete file
-				System.exit(0);// exit application
-			} // end else
-				// else exit application
-		} else {
-			// delete generated file if user chooses not to save file
-			if (file.getName().equals(generatedFileName))
-				file.delete();// delete file
-			System.exit(0);// exit application
-		} // end else
-	}// end exitApp
-
-	// generate 20 character long file name
-	private String getFileName() {
-		String fileNameChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-";
-		StringBuilder fileName = new StringBuilder();
-		Random rnd = new Random();
-		// loop until 20 character long file name is generated
-		while (fileName.length() < 20) {
-			int index = (int) (rnd.nextFloat() * fileNameChars.length());
-			fileName.append(fileNameChars.charAt(index));
-		}
-		String generatedfileName = fileName.toString();
-		return generatedfileName;
-	}// end getFileName
 
 	// create file with generated file name when application is opened
 	private void createRandomFile() {
@@ -1049,15 +1053,18 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		frame.setVisible(true);
 	}// end createAndShowGUI
 
-	// main method
-	public static void main(String args[]) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
-			}
-		});
-
-	}// end main
+	// generate 20 character long file name
+	private String getFileName() {
+		String fileNameChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-";
+		StringBuilder fileName = new StringBuilder();
+		Random rnd = new Random();
+		// loop until 20 character long file name is generated
+		while (fileName.length() < 20) {
+			int index = (int) (rnd.nextFloat() * fileNameChars.length());
+			fileName.append(fileNameChars.charAt(index));
+		}
+		return fileName.toString();
+	}// end getFileName
 
 	// DocumentListener methods
 	public void changedUpdate(DocumentEvent d) {
